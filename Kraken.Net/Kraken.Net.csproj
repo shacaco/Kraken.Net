@@ -24,6 +24,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <DocumentationFile>Kraken.Net.xml</DocumentationFile>
+    <AssemblyName>Kraken.Net</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Label="Deterministic Build" Condition="'$(Configuration)' == 'Release'">
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -49,10 +50,16 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="CryptoExchange.Net" Version="4.2.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="CryptoExchange.Net">
+      <HintPath>..\..\CryptoExchange.Net\CryptoExchange.Net\bin\Debug\netstandard2.0\CryptoExchange.Net.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
