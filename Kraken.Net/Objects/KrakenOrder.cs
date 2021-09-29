@@ -42,12 +42,12 @@ namespace Kraken.Net.Objects
         /// Start timestamp
         /// </summary>
         [JsonProperty("starttm"), JsonConverter(typeof(TimestampSecondsConverter))]
-        public DateTime StartTime { get; set; }
+        public DateTime? StartTime { get; set; }
         /// <summary>
         /// Expire timestamp
         /// </summary>
         [JsonProperty("expiretm"), JsonConverter(typeof(TimestampSecondsConverter))]
-        public DateTime ExpireTime { get; set; }
+        public DateTime? ExpireTime { get; set; }
         /// <summary>
         /// Close timestamp
         /// </summary>
@@ -118,7 +118,7 @@ namespace Kraken.Net.Objects
             Status == OrderStatus.Pending || Status == OrderStatus.Open ? IExchangeClient.OrderStatus.Active:
             IExchangeClient.OrderStatus.Filled;
         bool ICommonOrder.IsActive => Status == OrderStatus.Open;
-        DateTime ICommonOrder.CommonOrderTime => StartTime;
+        DateTime ICommonOrder.CommonOrderTime => StartTime ?? DateTime.MinValue;
 
         IExchangeClient.OrderSide ICommonOrder.CommonSide => OrderDetails.Side == OrderSide.Sell
             ? IExchangeClient.OrderSide.Sell
