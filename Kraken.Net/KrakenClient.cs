@@ -537,15 +537,15 @@ namespace Kraken.Net
         /// <param name="twoFactorPassword">Password or authentication app code if enabled</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Deposit status list</returns>
-        public async Task<WebCallResult<IEnumerable<KrakenDepositStatus>>> GetDepositStatusAsync(string asset, string depositMethod, string? twoFactorPassword = null, CancellationToken ct = default)
+        public async Task<WebCallResult<IEnumerable<KrakenDepositStatus>>> GetDepositStatusAsync(string asset, string? depositMethod = null, string? twoFactorPassword = null, CancellationToken ct = default)
         {
             asset.ValidateNotNull(nameof(asset));
-            depositMethod.ValidateNotNull(nameof(depositMethod));
+
             var parameters = new Dictionary<string, object>()
             {
-                {"asset", asset},
-                {"method", depositMethod},
+                {"asset", asset}
             };
+            parameters.AddOptionalParameter("method", depositMethod);
             parameters.AddOptionalParameter("otp", twoFactorPassword ?? _otp);
 
             return await Execute<IEnumerable<KrakenDepositStatus>>(GetUri("0/private/DepositStatus"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
@@ -666,6 +666,26 @@ namespace Kraken.Net
 
             parameters.AddOptionalParameter("otp", twoFactorPassword ?? _otp);
             return await Execute<KrakenWithdrawInfo>(GetUri("0/private/WithdrawInfo"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Get status of a withdrawal
+        /// </summary>
+        /// <param name="asset">The asset</param>
+        /// <param name="method">method</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        public async Task<WebCallResult<IEnumerable<KrakenWithdrawStatus>>> GetWithdrawStatusAsync(string asset, string? method = null, CancellationToken ct = default)
+        {
+            asset.ValidateNotNull(nameof(asset));
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "asset", asset }
+            };
+
+            parameters.AddOptionalParameter("method", method);
+            return await Execute< IEnumerable<KrakenWithdrawStatus>>(GetUri("0/private/WithdrawStatus"), HttpMethod.Post, ct, parameters, true).ConfigureAwait(false);
         }
 
         /// <summary>
