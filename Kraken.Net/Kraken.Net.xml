@@ -431,11 +431,12 @@
             <param name="handler">Data handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Kraken.Net.Interfaces.IKrakenSocketClient.SubscribeToOrderUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenStreamOrder}})">
+        <member name="M:Kraken.Net.Interfaces.IKrakenSocketClient.SubscribeToOrderUpdatesAsync(System.String,System.Nullable{System.Boolean},System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenStreamOrder}})">
             <summary>
             Subscribe to open order updates
             </summary>
             <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
+            <param name="rateCounter">whether to receive rate counter data</param>
             <param name="handler">Data handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
@@ -1091,7 +1092,7 @@
             <param name="handler">Data handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Kraken.Net.KrakenSocketClient.SubscribeToOrderUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenStreamOrder}})">
+        <member name="M:Kraken.Net.KrakenSocketClient.SubscribeToOrderUpdatesAsync(System.String,System.Nullable{System.Boolean},System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenStreamOrder}})">
             <summary>
             Subscribe to open order updates
             </summary>
@@ -1924,6 +1925,11 @@
         <member name="P:Kraken.Net.Objects.KrakenOrder.Oflags">
             <summary>
             Order flags
+            </summary>
+        </member>
+        <member name="P:Kraken.Net.Objects.KrakenOrder.RateCount">
+            <summary>
+            Rate Count
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenOrder.Reason">

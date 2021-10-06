@@ -45,10 +45,14 @@ namespace Kraken.Net.Objects.Socket
     {
         [JsonProperty("token")]
         public string Token { get; set; }
+       
+        [JsonProperty("ratecounter")]
+        public bool? RateCounter { get; set; }
 
-        public KrakenOpenOrdersSubscriptionDetails(string token) : base("openOrders")
+        public KrakenOpenOrdersSubscriptionDetails(string token, bool? rateCounter) : base("openOrders")
         {
             Token = token;
+            RateCounter = rateCounter;
         }
     }
 

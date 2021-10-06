@@ -68,9 +68,10 @@ namespace Kraken.Net.Interfaces
         /// Subscribe to open order updates
         /// </summary>
         /// <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
+        /// <param name="rateCounter">whether to receive rate counter data</param>
         /// <param name="handler">Data handler</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(string socketToken,
+        Task<CallResult<UpdateSubscription>> SubscribeToOrderUpdatesAsync(string socketToken, bool? rateCounter,
             Action<DataEvent<KrakenStreamOrder>> handler);
 
         /// <summary>

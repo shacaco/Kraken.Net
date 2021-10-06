@@ -99,6 +99,12 @@ namespace Kraken.Net.Objects
         /// </summary>
         public string Oflags { get; set; } = string.Empty;
         /// <summary>
+        /// Rate Count
+        /// </summary>
+        [JsonProperty("ratecount")]
+        [JsonOptionalProperty]
+        public int? RateCount { get; set; }
+        /// <summary>
         /// Reason of failure
         /// </summary>
         [JsonOptionalProperty]
