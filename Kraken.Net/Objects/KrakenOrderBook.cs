@@ -68,12 +68,12 @@ namespace Kraken.Net.Objects
         /// Asks
         /// </summary>
         [JsonProperty("as")]
-        public IEnumerable<KrakenStreamOrderBookEntry> Asks { get; set; } = Array.Empty<KrakenStreamOrderBookEntry>();
+        public ICollection<KrakenStreamOrderBookEntry> Asks { get; set; } = new List<KrakenStreamOrderBookEntry>();
         /// <summary>
         /// Bids
         /// </summary>
         [JsonProperty("bs")]
-        public IEnumerable<KrakenStreamOrderBookEntry> Bids { get; set; } = Array.Empty<KrakenStreamOrderBookEntry>();
+        public ICollection<KrakenStreamOrderBookEntry> Bids { get; set; } = new List<KrakenStreamOrderBookEntry>();
 
         /// <summary>
         /// Checksum
