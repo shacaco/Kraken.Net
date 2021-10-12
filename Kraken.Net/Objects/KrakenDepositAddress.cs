@@ -19,6 +19,10 @@ namespace Kraken.Net.Objects
         [JsonProperty("expiretm"), JsonConverter(typeof(TimestampSecondsConverter))]
         public DateTime ExpireTime { get; set; }
         /// <summary>
+        /// The tag
+        /// </summary>
+        public string Tag { get; set; } = string.Empty;
+        /// <summary>
         /// If the address has been used before
         /// </summary>
         [JsonProperty("new")]

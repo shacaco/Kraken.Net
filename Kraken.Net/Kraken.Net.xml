@@ -524,6 +524,14 @@
             <param name="websocketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
             <returns></returns>
         </member>
+        <member name="M:Kraken.Net.Interfaces.IKrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenBalance}})">
+            <summary>
+            Subscribe to balances updates
+            </summary>
+            <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
+            <param name="handler">Data handler</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
         <member name="T:Kraken.Net.KrakenClient">
             <summary>
             Client for the Kraken Rest API
@@ -1117,6 +1125,14 @@
             <param name="handler">Data handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
+        <member name="M:Kraken.Net.KrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenBalance}})">
+            <summary>
+            Subscribe to balances updates
+            </summary>
+            <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
+            <param name="handler">Data handler</param>
+            <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        </member>
         <member name="M:Kraken.Net.KrakenSocketClient.PlaceOrderAsync(System.String,System.String,Kraken.Net.Objects.OrderType,Kraken.Net.Objects.OrderSide,System.Decimal,System.Nullable{System.UInt32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Boolean},System.Nullable{Kraken.Net.Objects.OrderType},System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
             <summary>
             Place a new order
@@ -1582,6 +1598,11 @@
         <member name="P:Kraken.Net.Objects.KrakenDepositAddress.ExpireTime">
             <summary>
             The expire time of the address
+            </summary>
+        </member>
+        <member name="P:Kraken.Net.Objects.KrakenDepositAddress.Tag">
+            <summary>
+            The tag
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenDepositAddress.IsNew">

@@ -70,6 +70,17 @@ namespace Kraken.Net.Objects.Socket
         }
     }
 
+    internal class KrakenBalancesSubscriptionDetails : KrakenSubscriptionDetails
+    {
+        [JsonProperty("token")]
+        public string Token { get; set; }
+
+        public KrakenBalancesSubscriptionDetails(string token) : base("balances")
+        {
+            Token = token;
+        }
+    }
+
     internal class KrakenOHLCSubscriptionDetails: KrakenSubscriptionDetails
     {
         [JsonProperty("interval")]

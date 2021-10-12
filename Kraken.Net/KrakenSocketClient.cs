@@ -310,6 +310,52 @@ namespace Kraken.Net
         }
 
         /// <summary>
+        /// Subscribe to balances updates
+        /// </summary>
+        /// <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
+        /// <param name="handler">Data handler</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBalancesUpdatesAsync(string socketToken, Action<DataEvent<KrakenBalance>> handler)
+        {
+            var innerHandler = new Action<DataEvent<string>>(data =>
+            {
+                var token = data.Data.ToJToken(log);
+                if (token != null && token.Any())
+                {
+                    var sequence = token[2]["sequence"].Value<int>();
+                    if (token[0]!.Type == JTokenType.Array)
+                    {
+                        var dataArray = (JArray)token[0]!;
+                        var deserialized = Deserialize<Dictionary<string, KrakenBalance>[]>(dataArray);
+                        if (deserialized)
+                        {
+                            foreach (var entry in deserialized.Data)
+                            {
+                                foreach (var item in entry)
+                                {
+                                    //item.Value.TradeId = item.Key;
+                                    //item.Value.SequenceNumber = sequence;
+                                    //handler?.Invoke(data.As(item.Value, item.Value.Symbol));
+                                }
+                            }
+
+                            return;
+                        }
+                    }
+                }
+
+                log.Write(LogLevel.Warning, "Failed to deserialize stream order");
+            });
+
+            var result =  await SubscribeAsync(_authBaseAddress, new KrakenSubscribeRequest("balances", NextId())
+            {
+                Details = new KrakenBalancesSubscriptionDetails(socketToken)
+            }, null, false, innerHandler).ConfigureAwait(false);
+
+            return result;
+        }
+
+        /// <summary>
         /// Place a new order
         /// </summary>
         /// <param name="websocketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
