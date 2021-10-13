@@ -220,4 +220,39 @@
         /// </summary>
         PostOnly
     }
+
+    /// <summary>
+    /// Withdraw Status
+    /// </summary>
+    public enum KrakenTransactionStatusEnum
+    {
+        /// <summary>
+        ///All time prior to the establishment of a live transaction.  This
+        ///may include, for instance, the gathering of quotations for the
+        ///potential execution of a financial transaction's settlement prior
+        ///to actual settlement initiation, some process of selection of a
+        ///settlement path based upon a collection of such quotations, or
+        ///the period prior to receiving a positive response to the finally
+        ///issued request to execute the transaction.
+        /// </summary>
+        Initial,
+        /// <summary>
+        /// Subsequent to execution, but prior to the completion of settlement-related processes.
+        /// </summary>
+        Pending,
+        /// <summary>
+        /// After settlement, but prior to asbolute completion.  For instance, the period for which a settled transaction remains
+        /// exposed to third party cancellation or refund/reversal procedures.
+        /// </summary>
+        Settled,
+        /// <summary>
+        /// The transaction completed successfully.
+        /// </summary>
+        Success,
+        /// <summary>
+        /// The transaction did not complete successfully.
+        /// </summary>
+        Failure
+    }
+
 }

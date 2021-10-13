@@ -1,4 +1,5 @@
 ﻿using CryptoExchange.Net.Converters;
+using Kraken.Net.Converters;
 using Newtonsoft.Json;
 using System;
 
@@ -54,6 +55,7 @@ namespace Kraken.Net.Objects
         /// <summary>
         /// Status of the transaction
         /// </summary>
-        public string Status { get; set; } = string.Empty;
+        [JsonConverter(typeof(TransactionStatusEnumConverter))]
+        public KrakenTransactionStatusEnum Status { get; set; }
     }
 }
