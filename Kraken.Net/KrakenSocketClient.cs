@@ -21,12 +21,12 @@ namespace Kraken.Net
     /// <summary>
     /// Client for the Kraken websocket API
     /// </summary>
-    public class KrakenSocketClient: SocketClient, IKrakenSocketClient
+    public class KrakenSocketClient : SocketClient, IKrakenSocketClient
     {
         #region fields
         private static KrakenSocketClientOptions defaultOptions = new KrakenSocketClientOptions();
         private static KrakenSocketClientOptions DefaultOptions => defaultOptions.Copy();
-                
+
         private readonly string _authBaseAddress;
         private Dictionary<string, string> _symbolSynonyms;
         #endregion
@@ -115,7 +115,7 @@ namespace Kraken.Net
         public async Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<KrakenStreamTick>> handler)
         {
             var symbolArray = symbols.ToArray();
-            for (var i = 0; i< symbolArray.Length; i++)
+            for (var i = 0; i < symbolArray.Length; i++)
             {
                 symbolArray[i].ValidateKrakenWebsocketSymbol();
                 symbolArray[i] = SymbolToServer(symbolArray[i]);
@@ -195,7 +195,7 @@ namespace Kraken.Net
         {
             symbol.ValidateKrakenWebsocketSymbol();
             var subSymbol = SymbolToServer(symbol);
-            var result = new KrakenSocketEvent<KrakenStreamOrderBook> { Data = new KrakenStreamOrderBook() } ;
+            var result = new KrakenSocketEvent<KrakenStreamOrderBook> { Data = new KrakenStreamOrderBook() };
             var serializer = new JsonSerializer();
             var innerHandler = new Action<DataEvent<string>>(data =>
             {
@@ -209,7 +209,7 @@ namespace Kraken.Net
                 handler(data.As(result.Data, symbol));
             });
 
-            return await SubscribeAsync(new KrakenSubscribeRequest("book", NextId(), subSymbol) { Details = new KrakenDepthSubscriptionDetails(depth)}, null, false, innerHandler).ConfigureAwait(false);
+            return await SubscribeAsync(new KrakenSubscribeRequest("book", NextId(), subSymbol) { Details = new KrakenDepthSubscriptionDetails(depth) }, null, false, innerHandler).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -228,13 +228,13 @@ namespace Kraken.Net
                     var sequence = token[2]["sequence"].Value<int>();
                     if (token[0]!.Type == JTokenType.Array)
                     {
-                        var dataArray = (JArray) token[0]!;
+                        var dataArray = (JArray)token[0]!;
                         var deserialized = Deserialize<Dictionary<string, KrakenStreamOrder>[]>(dataArray);
                         if (deserialized)
                         {
                             foreach (var entry in deserialized.Data)
                             {
-                                foreach(var dEntry in entry)
+                                foreach (var dEntry in entry)
                                 {
                                     dEntry.Value.OrderId = dEntry.Key;
                                     dEntry.Value.SequenceNumber = sequence;
@@ -287,7 +287,7 @@ namespace Kraken.Net
                         {
                             foreach (var entry in deserialized.Data)
                             {
-                                foreach(var item in entry)
+                                foreach (var item in entry)
                                 {
                                     item.Value.TradeId = item.Key;
                                     item.Value.SequenceNumber = sequence;
@@ -319,35 +319,26 @@ namespace Kraken.Net
         {
             var innerHandler = new Action<DataEvent<string>>(data =>
             {
-                var token = data.Data.ToJToken(log);
-                if (token != null && token.Any())
+                var token = data.Data.ToJToken(log)?["balances"];
+                if (token != null)
                 {
-                    var sequence = token[2]["sequence"].Value<int>();
-                    if (token[0]!.Type == JTokenType.Array)
+                    var deserialized = Deserialize<Dictionary<string, decimal>>(token);
+                    if (deserialized)
                     {
-                        var dataArray = (JArray)token[0]!;
-                        var deserialized = Deserialize<Dictionary<string, KrakenBalance>[]>(dataArray);
-                        if (deserialized)
+                        foreach (var entry in deserialized.Data)
                         {
-                            foreach (var entry in deserialized.Data)
-                            {
-                                foreach (var item in entry)
-                                {
-                                    //item.Value.TradeId = item.Key;
-                                    //item.Value.SequenceNumber = sequence;
-                                    //handler?.Invoke(data.As(item.Value, item.Value.Symbol));
-                                }
-                            }
-
-                            return;
+                            handler?.Invoke(data.As(new KrakenBalance { Asset = entry.Key, Balance = entry.Value }));
                         }
-                    }
-                }
 
-                log.Write(LogLevel.Warning, "Failed to deserialize stream order");
+                        return;
+                    }
+
+
+                    log.Write(LogLevel.Warning, "Failed to deserialize balances");
+                }
             });
 
-            var result =  await SubscribeAsync(_authBaseAddress, new KrakenSubscribeRequest("balances", NextId())
+            var result = await SubscribeAsync(_authBaseAddress, new KrakenSubscribeRequest("balances", NextId())
             {
                 Details = new KrakenBalancesSubscriptionDetails(socketToken)
             }, null, false, innerHandler).ConfigureAwait(false);
@@ -390,14 +381,14 @@ namespace Kraken.Net
         /// <param name="secondaryClosePrice">Close order secondary price</param>
         /// <returns></returns>
         public async Task<CallResult<KrakenStreamPlacedOrder>> PlaceOrderAsync(
-            string websocketToken, 
+            string websocketToken,
             string symbol,
             OrderType type,
             OrderSide side,
             decimal quantity,
             uint? clientOrderId = null,
             decimal? price = null,
-            decimal? secondaryPrice = null, 
+            decimal? secondaryPrice = null,
             decimal? leverage = null,
             DateTime? startTime = null,
             DateTime? expireTime = null,
@@ -512,7 +503,8 @@ namespace Kraken.Net
                 return false;
 
             var error = data["errorMessage"]?.ToString();
-            if (!string.IsNullOrEmpty(error)) {
+            if (!string.IsNullOrEmpty(error))
+            {
                 callResult = new CallResult<T>(default, new ServerError(error));
                 return true;
             }
@@ -532,15 +524,15 @@ namespace Kraken.Net
             if (message["reqid"] == null)
                 return false;
 
-            var requestId = (int) message["reqid"];
-            var kRequest = (KrakenSubscribeRequest) request;
+            var requestId = (int)message["reqid"];
+            var kRequest = (KrakenSubscribeRequest)request;
             if (requestId != kRequest.RequestId)
                 return false;
-            
+
             var response = message.ToObject<KrakenSubscriptionEvent>();
-            if(response.ChannelId != 0)
+            if (response.ChannelId != 0)
                 kRequest.ChannelId = response.ChannelId;
-            callResult = new CallResult<object>(response, response.Status == "subscribed" ? null: new ServerError(response.ErrorMessage ?? "-"));
+            callResult = new CallResult<object>(response, response.Status == "subscribed" ? null : new ServerError(response.ErrorMessage ?? "-"));
             return true;
         }
 
@@ -548,10 +540,17 @@ namespace Kraken.Net
         protected override bool MessageMatchesHandler(JToken message, object request)
         {
             if (message.Type != JTokenType.Array)
+            {
+                if (message.Type != JTokenType.Object)
+                    return false;
+                var kr = (KrakenSubscribeRequest)request;
+                if (message["channel"]?.ToString() == kr.Details.ChannelName)
+                    return true;
                 return false;
+            }
 
             var kRequest = (KrakenSubscribeRequest)request;
-            var arr = (JArray) message;
+            var arr = (JArray)message;
 
             string channel;
             string symbol;
@@ -615,7 +614,7 @@ namespace Kraken.Net
             KrakenUnsubscribeRequest unsubRequest;
             if (!kRequest.ChannelId.HasValue)
             {
-                if(kRequest.Details?.Topic == "ownTrades")
+                if (kRequest.Details?.Topic == "ownTrades")
                 {
                     unsubRequest = new KrakenUnsubscribeRequest(NextId(), new KrakenUnsubscribeSubscription
                     {
