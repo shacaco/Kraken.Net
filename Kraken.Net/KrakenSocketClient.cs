@@ -195,8 +195,7 @@ namespace Kraken.Net
         {
             symbol.ValidateKrakenWebsocketSymbol();
             var subSymbol = SymbolToServer(symbol);
-            var result = new KrakenSocketEvent<KrakenStreamOrderBook> { Data = new KrakenStreamOrderBook() };
-            var serializer = new JsonSerializer();
+
             var innerHandler = new Action<DataEvent<string>>(data =>
             {
                 var token = data.Data.ToJToken(log);
@@ -205,8 +204,8 @@ namespace Kraken.Net
                     log.Write(LogLevel.Warning, "Failed to deserialize stream order book");
                     return;
                 }
-                StreamOrderBookConverter.Populate((JArray)token, result, serializer);
-                handler(data.As(result.Data, symbol));
+                var evnt = StreamOrderBookConverter.Convert((JArray)token);
+                handler(data.As(evnt.Data, symbol));
             });
 
             return await SubscribeAsync(new KrakenSubscribeRequest("book", NextId(), subSymbol) { Details = new KrakenDepthSubscriptionDetails(depth) }, null, false, innerHandler).ConfigureAwait(false);
