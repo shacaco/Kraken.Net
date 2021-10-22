@@ -63,33 +63,33 @@ namespace Kraken.Net.Objects
         /// Quantity of the order
         /// </summary>
         [JsonProperty("vol")]
-        public decimal Quantity { get; set; }
+        public decimal? Quantity { get; set; }
         /// <summary>
         /// Filled quantity
         /// </summary>
         [JsonProperty("vol_exec")]
-        public decimal ExecutedQuantity { get; set; }
+        public decimal? ExecutedQuantity { get; set; }
         /// <summary>
         /// Cost of the order
         /// </summary>
-        public decimal Cost { get; set; }
+        public decimal? Cost { get; set; }
         /// <summary>
         /// Fee
         /// </summary>
-        public decimal Fee { get; set; }
+        public decimal? Fee { get; set; }
         /// <summary>
         /// Average price of the order
         /// </summary>
         [JsonProperty("price")]
-        public decimal AveragePrice { get; set; }
+        public decimal? AveragePrice { get; set; }
         /// <summary>
         /// Stop price
         /// </summary>
-        public decimal StopPrice { get; set; }
+        public decimal? StopPrice { get; set; }
         /// <summary>
         /// Limit price
         /// </summary>
-        public decimal LimitPrice { get; set; }
+        public decimal? LimitPrice { get; set; }
         /// <summary>
         /// Miscellaneous info
         /// </summary>
@@ -119,7 +119,7 @@ namespace Kraken.Net.Objects
         string ICommonOrderId.CommonId => ReferenceId;
         string ICommonOrder.CommonSymbol => OrderDetails.Symbol;
         decimal ICommonOrder.CommonPrice => OrderDetails.Price;
-        decimal ICommonOrder.CommonQuantity => Quantity;
+        decimal ICommonOrder.CommonQuantity => Quantity ?? 0;
         IExchangeClient.OrderStatus ICommonOrder.CommonStatus => Status == OrderStatus.Canceled || Status == OrderStatus.Expired ? IExchangeClient.OrderStatus.Canceled:
             Status == OrderStatus.Pending || Status == OrderStatus.Open ? IExchangeClient.OrderStatus.Active:
             IExchangeClient.OrderStatus.Filled;

@@ -179,8 +179,10 @@ namespace Kraken.Net.Interfaces
         /// Subscribe to balances updates
         /// </summary>
         /// <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
-        /// <param name="handler">Data handler</param>
+        /// <param name="balancesHandler"> will be recieved on logon</param>
+        /// <param name="ledgesHandler">Will be recieved on updates</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBalancesUpdatesAsync(string socketToken, Action<DataEvent<KrakenBalance>> handler);
+        Task<CallResult<UpdateSubscription>> SubscribeToBalancesUpdatesAsync(string socketToken, Action<DataEvent<Dictionary<string, decimal>>> balancesHandler, Action<DataEvent<IEnumerable<KrakenLedgerEntry>>> ledgesHandler);
+
     }
 }

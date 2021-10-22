@@ -312,9 +312,10 @@ namespace Kraken.Net
         /// Subscribe to balances updates
         /// </summary>
         /// <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
-        /// <param name="handler">Data handler</param>
+        /// <param name="balancesHandler"> will be recieved on logon</param>
+        /// <param name="ledgesHandler">Will be recieved on updates</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        public async Task<CallResult<UpdateSubscription>> SubscribeToBalancesUpdatesAsync(string socketToken, Action<DataEvent<KrakenBalance>> handler)
+        public async Task<CallResult<UpdateSubscription>> SubscribeToBalancesUpdatesAsync(string socketToken, Action<DataEvent<Dictionary<string, decimal>>> balancesHandler, Action<DataEvent<IEnumerable<KrakenLedgerEntry>>> ledgesHandler)
         {
             var innerHandler = new Action<DataEvent<string>>(data =>
             {
@@ -323,17 +324,18 @@ namespace Kraken.Net
                 {
                     var deserialized = Deserialize<Dictionary<string, decimal>>(token);
                     if (deserialized)
-                    {
-                        foreach (var entry in deserialized.Data)
-                        {
-                            handler?.Invoke(data.As(new KrakenBalance { Asset = entry.Key, Balance = entry.Value }));
-                        }
-
-                        return;
-                    }
-
-
-                    log.Write(LogLevel.Warning, "Failed to deserialize balances");
+                        balancesHandler?.Invoke(data.As(deserialized.Data, "balances"));
+                    else
+                        log.Write(LogLevel.Warning, "Failed to deserialize balances");
+                }
+                token = data.Data.ToJToken(log)?["ledgers"];
+                if (token != null)
+                {
+                    var deserialized = Deserialize<IEnumerable<KrakenLedgerEntry>>(token);
+                    if (deserialized)
+                        ledgesHandler?.Invoke(data.As(deserialized.Data, "balances"));
+                    else
+                        log.Write(LogLevel.Warning, "Failed to deserialize balances");
                 }
             });
 
@@ -380,21 +382,21 @@ namespace Kraken.Net
         /// <param name="secondaryClosePrice">Close order secondary price</param>
         /// <returns></returns>
         public async Task<CallResult<KrakenStreamPlacedOrder>> PlaceOrderAsync(
-            string websocketToken,
-            string symbol,
-            OrderType type,
-            OrderSide side,
-            decimal quantity,
-            uint? clientOrderId = null,
-            decimal? price = null,
-            decimal? secondaryPrice = null,
-            decimal? leverage = null,
-            DateTime? startTime = null,
-            DateTime? expireTime = null,
-            bool? validateOnly = null,
-            OrderType? closeOrderType = null,
-            decimal? closePrice = null,
-            decimal? secondaryClosePrice = null)
+        string websocketToken,
+        string symbol,
+        OrderType type,
+        OrderSide side,
+        decimal quantity,
+        uint? clientOrderId = null,
+        decimal? price = null,
+        decimal? secondaryPrice = null,
+        decimal? leverage = null,
+        DateTime? startTime = null,
+        DateTime? expireTime = null,
+        bool? validateOnly = null,
+        OrderType? closeOrderType = null,
+        decimal? closePrice = null,
+        decimal? secondaryClosePrice = null)
         {
             var request = new KrakenSocketPlaceOrderRequest
             {

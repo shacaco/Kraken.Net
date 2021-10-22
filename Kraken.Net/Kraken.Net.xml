@@ -524,12 +524,13 @@
             <param name="websocketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
             <returns></returns>
         </member>
-        <member name="M:Kraken.Net.Interfaces.IKrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenBalance}})">
+        <member name="M:Kraken.Net.Interfaces.IKrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,System.Decimal}}},System.Action{CryptoExchange.Net.Sockets.DataEvent{System.Collections.Generic.IEnumerable{Kraken.Net.Objects.KrakenLedgerEntry}}})">
             <summary>
             Subscribe to balances updates
             </summary>
             <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
-            <param name="handler">Data handler</param>
+            <param name="balancesHandler"> will be recieved on logon</param>
+            <param name="ledgesHandler">Will be recieved on updates</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
         <member name="T:Kraken.Net.KrakenClient">
@@ -1125,12 +1126,13 @@
             <param name="handler">Data handler</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
-        <member name="M:Kraken.Net.KrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{Kraken.Net.Objects.KrakenBalance}})">
+        <member name="M:Kraken.Net.KrakenSocketClient.SubscribeToBalancesUpdatesAsync(System.String,System.Action{CryptoExchange.Net.Sockets.DataEvent{System.Collections.Generic.Dictionary{System.String,System.Decimal}}},System.Action{CryptoExchange.Net.Sockets.DataEvent{System.Collections.Generic.IEnumerable{Kraken.Net.Objects.KrakenLedgerEntry}}})">
             <summary>
             Subscribe to balances updates
             </summary>
             <param name="socketToken">The socket token as retrieved by the GetWebsocketTokenAsync method in the KrakenClient</param>
-            <param name="handler">Data handler</param>
+            <param name="balancesHandler"> will be recieved on logon</param>
+            <param name="ledgesHandler">Will be recieved on updates</param>
             <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
         </member>
         <member name="M:Kraken.Net.KrakenSocketClient.PlaceOrderAsync(System.String,System.String,Kraken.Net.Objects.OrderType,Kraken.Net.Objects.OrderSide,System.Decimal,System.Nullable{System.UInt32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.DateTime},System.Nullable{System.DateTime},System.Nullable{System.Boolean},System.Nullable{Kraken.Net.Objects.OrderType},System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
@@ -2638,22 +2640,22 @@
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.CombinedBalance">
             <summary>
-            Combined balance
+            Equivalent balance (combined balance of all currencies)
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.TradeBalance">
             <summary>
-            Trade balance
+            Trade balance (combined balance of all equity currencies)
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.MarginOpenPositions">
             <summary>
-            Margin open positions
+            Margin amount of open positions
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.OpenPositionsUnrealizedNetProfit">
             <summary>
-            Unrealized net profit in open positions
+            Unrealized net profit/loss of open positions
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.OpenPositionsCostBasis">
@@ -2663,22 +2665,22 @@
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.OpenPositionsValuation">
             <summary>
-            Open positions valuation
+            Current floating valuation of open positions
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.Equity">
             <summary>
-            Equity
+            Equity: trade balance + unrealized net profit/loss
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.FreeMargin">
             <summary>
-            Free margin
+            Free margin: Equity - initial margin (maximum margin available to open new positions)
             </summary>
         </member>
         <member name="P:Kraken.Net.Objects.KrakenTradeBalance.MarginLevel">
             <summary>
-            Margin level
+            Margin level: (equity / initial margin) * 100
             </summary>
         </member>
         <member name="T:Kraken.Net.Objects.KrakenTradeVolume">
