@@ -195,7 +195,11 @@
         /// <summary>
         /// Rollover
         /// </summary>
-        Rollover
+        Rollover,
+        /// <summary>
+        /// Settled
+        /// </summary>
+        Settled
     }
 
     /// <summary>

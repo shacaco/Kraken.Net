@@ -1482,6 +1482,11 @@
             Rollover
             </summary>
         </member>
+        <member name="F:Kraken.Net.Objects.LedgerEntryType.Settled">
+            <summary>
+            Settled
+            </summary>
+        </member>
         <member name="T:Kraken.Net.Objects.SystemStatus">
             <summary>
             System status info
