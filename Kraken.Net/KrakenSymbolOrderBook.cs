@@ -62,14 +62,14 @@ namespace Kraken.Net
         {
             if (!initialSnapshotDone)
             {
-                var maxNumber = Math.Max(data.Data.Bids.Max(b => b.Sequence), data.Data.Asks.Max(b => b.Sequence));
+                var maxNumber = Math.Max(data.Data.Bids.Count > 0 ? data.Data.Bids.Max(b => b.Sequence) : 0, data.Data.Asks.Count > 0 ? data.Data.Asks.Max(b => b.Sequence) : 0);
                 SetInitialOrderBook(maxNumber, data.Data.Bids, data.Data.Asks);
                 initialSnapshotDone = true;
             }
             else
             {
                 UpdateOrderBook(data.Data.Bids, data.Data.Asks);
-                AddChecksum((int)data.Data.Checksum!);
+                AddChecksum((int)(data.Data.Checksum ?? 0));
             }
         }
 
@@ -77,13 +77,13 @@ namespace Kraken.Net
         protected override bool DoChecksum(int checksum)
         {
             var checksumValues = new List<string>();
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < Math.Min(10, AskCount); i++)
             {
                 var ask = (KrakenStreamOrderBookEntry)asks.ElementAt(i).Value;
                 checksumValues.Add(ToChecksumString(ask.RawPrice));
                 checksumValues.Add(ToChecksumString(ask.RawQuantity));
             }
-            for (var i = 0; i < 10; i++)
+            for (var i = 0; i < Math.Min(10, BidCount); i++)
             {
                 var bid = (KrakenStreamOrderBookEntry)bids.ElementAt(i).Value;
                 checksumValues.Add(ToChecksumString(bid.RawPrice));
@@ -122,7 +122,7 @@ namespace Kraken.Net
             asks.Clear();
             bids.Clear();
 
-            if(_socketOwner)
+            if (_socketOwner)
                 socketClient?.Dispose();
         }
     }
