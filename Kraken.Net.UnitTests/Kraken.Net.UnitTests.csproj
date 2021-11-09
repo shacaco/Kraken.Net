@@ -16,4 +16,10 @@
     <ProjectReference Include="..\Kraken.Net\Kraken.Net.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="CryptoExchange.Net">
+      <HintPath>..\..\CryptoExchange.Net\CryptoExchange.Net\bin\Debug\netstandard2.0\CryptoExchange.Net.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
