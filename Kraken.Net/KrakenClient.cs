@@ -730,6 +730,7 @@ namespace Kraken.Net
 
         #region common interface
 
+#pragma warning disable 1066
         async Task<WebCallResult<IEnumerable<ICommonSymbol>>> IExchangeClient.GetSymbolsAsync()
         {
             var exchangeInfo = await GetSymbolsAsync().ConfigureAwait(false);
@@ -832,6 +833,8 @@ namespace Kraken.Net
         /// <inheritdoc />
         protected override void WriteParamBody(IRequest request, Dictionary<string, object> parameters, string contentType)
         {
+            if (parameters.TryGetValue("nonce", out var nonce))
+                log.Write(Microsoft.Extensions.Logging.LogLevel.Trace, $"[{request.RequestId}] Nonce: " + nonce);
             var stringData = string.Join("&", parameters.OrderBy(p => p.Key != "nonce").Select(p => $"{p.Key}={p.Value}"));
             request.SetContent(stringData, contentType);
         }
@@ -852,6 +855,7 @@ namespace Kraken.Net
 
             return result.As<T>(result.Data.Result);
         }
+#pragma warning restore 1066
 
         /// <summary>
         /// Get the name of a symbol for Kraken based on the base and quote asset

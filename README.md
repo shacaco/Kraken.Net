@@ -1,25 +1,27 @@
-# Kraken.Net
+# KrakenExchange.Net
 ![Build status](https://travis-ci.com/JKorf/Kraken.Net.svg?branch=master) ![Nuget version](https://img.shields.io/nuget/v/KrakenExchange.net.svg)  ![Nuget downloads](https://img.shields.io/nuget/dt/KrakenExchange.Net.svg)
 
-Kraken.Net is a wrapper around the Kraken API as described on [Kraken](https://www.kraken.com/features/api), including all features the API provides using clear and readable objects, both for the REST  as the websocket API's.
+KrakenExchange.Net is a wrapper around the Kraken API as described on [Kraken](https://www.kraken.com/features/api), including all features the API provides using clear and readable objects, both for the REST  as the websocket API's.
 
 **If you think something is broken, something is missing or have any questions, please open an [Issue](https://github.com/JKorf/Kraken.Net/issues)**
 
 ## CryptoExchange.Net
 This library is build upon the CryptoExchange.Net library, make sure to check out the documentation on that for basic usage: [docs](https://github.com/JKorf/CryptoExchange.Net)
 
-## Donations
+## Donate / Sponsor
 I develop and maintain this package on my own for free in my spare time. Donations are greatly appreciated. If you prefer to donate any other currency please contact me.
 
 **Btc**:  12KwZk3r2Y3JZ2uMULcjqqBvXmpDwjhhQS  
 **Eth**:  0x069176ca1a4b1d6e0b7901a6bc0dbf3bb0bf5cc2  
 **Nano**: xrb_1ocs3hbp561ef76eoctjwg85w5ugr8wgimkj8mfhoyqbx4s1pbc74zggw7gs  
 
+Alternatively, sponsor me on Github using [Github Sponsors](https://github.com/sponsors/JKorf)  
+
 ## Discord
 A Discord server is available [here](https://discord.gg/MSpeEtSY8t). For discussion and/or questions around the CryptoExchange.Net and implementation libraries, feel free to join.
 
 ## Getting started
-Make sure you have installed the Kraken.Net [Nuget](https://www.nuget.org/packages/KrakenExchange.Net/) package and add `using Kraken.Net` to your usings.  You now have access to 2 clients:  
+Make sure you have installed the KrakenExchange.Net [Nuget](https://www.nuget.org/packages/KrakenExchange.Net/) package and add `using Kraken.Net` to your usings.  You now have access to 2 clients:  
 **KrakenClient**  
 The client to interact with the Kraken REST API. Getting prices:
 ````C#
@@ -90,6 +92,25 @@ For the basic client options see also the CryptoExchange.Net [docs](https://gith
 |`AuthBaseAddress`|The base address for authenticated subscriptions|`wss://ws-auth.kraken.com/`
 
 ## Release notes
+* Version 2.2.3 - 08 Oct 2021
+    * Updated CryptoExchange.Net to fix some socket issues
+
+* Version 2.2.2 - 06 Oct 2021
+    * Updated CryptoExchange.Net, fixing socket issue when calling from .Net Framework
+
+* Version 2.2.1 - 05 Oct 2021
+    * Updated CryptoExchange.Net
+
+* Version 2.2.0 - 29 Sep 2021
+    * Renamed SubscribeToDepthUpdatesAsync to SubscribeToOrderBookUpdatesAsync
+    * Updated CryptoExchange.Net
+
+* Version 2.1.3 - 22 Sep 2021
+    * Fixed nonce provider when running multiple program instances
+
+* Version 2.1.2 - 22 Sep 2021
+    * Added trace output for nonce
+
 * Version 2.1.1 - 21 Sep 2021
     * Fix for nonce provider not working correctly in combination with other exchanges
 

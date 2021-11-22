@@ -67,36 +67,39 @@ namespace Kraken.Net.Converters
             if (arr.Count == 4)
             {
                 var innerObject = arr[1];
+                if (innerObject == null)
+                    return null;
+
                 if (innerObject["as"] != null)
                 {
                     // snapshot
-                    orderBook.Asks = innerObject["as"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
-                    orderBook.Bids = innerObject["bs"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
+                    orderBook.Asks = innerObject["as"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                    orderBook.Bids = innerObject["bs"]!.ToObject< IEnumerable<KrakenStreamOrderBookEntry>>()!;
                 }
                 else if (innerObject["a"] != null)
                 {
                     // Only asks
-                    orderBook.Asks = innerObject["a"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
+                    orderBook.Asks = innerObject["a"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
                 }
                 else
                 {
                     // Only bids
-                    orderBook.Bids = innerObject["b"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
+                    orderBook.Bids = innerObject["b"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
                 }
 
                 if (innerObject["c"] != null)
-                    orderBook.Checksum = (uint) innerObject["c"];
+                    orderBook.Checksum = innerObject["c"]!.Value<uint>();
                 
-                result.Topic = (string)arr[2];
-                result.Symbol = (string)arr[3];
+                result.Topic = arr[2].ToString();
+                result.Symbol = arr[3].ToString();
             }
             else
             {
-                orderBook.Asks = arr[1]["a"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
-                orderBook.Bids = arr[2]["b"].ToObject<ICollection<KrakenStreamOrderBookEntry>>();
-                orderBook.Checksum = (uint)arr[2]["c"];
-                result.Topic = (string)arr[3];
-                result.Symbol = (string)arr[4];
+                orderBook.Asks = arr[1]["a"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                orderBook.Bids = arr[2]["b"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                orderBook.Checksum = arr[2]["c"]!.Value<uint>();
+                result.Topic = arr[3].ToString();
+                result.Symbol = arr[4].ToString();
             }
 
             result.Data = orderBook;
