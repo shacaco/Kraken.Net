@@ -40,8 +40,6 @@ namespace Kucoin.Net.UnitTests.TestImplementations
         public string? LastSendMessage { get; set; }
         public double IncomingKbps => 0;
 
-        public double IncomingKbps => throw new NotImplementedException();
-
         public Task<bool> ConnectAsync()
         {
             Connected = CanConnect;
