@@ -73,18 +73,18 @@ namespace Kraken.Net.Converters
                 if (innerObject["as"] != null)
                 {
                     // snapshot
-                    orderBook.Asks = innerObject["as"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
-                    orderBook.Bids = innerObject["bs"]!.ToObject< IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                    orderBook.Asks = innerObject["as"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
+                    orderBook.Bids = innerObject["bs"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
                 }
                 else if (innerObject["a"] != null)
                 {
                     // Only asks
-                    orderBook.Asks = innerObject["a"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                    orderBook.Asks = innerObject["a"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
                 }
                 else
                 {
                     // Only bids
-                    orderBook.Bids = innerObject["b"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                    orderBook.Bids = innerObject["b"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
                 }
 
                 if (innerObject["c"] != null)
@@ -95,8 +95,8 @@ namespace Kraken.Net.Converters
             }
             else
             {
-                orderBook.Asks = arr[1]["a"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
-                orderBook.Bids = arr[2]["b"]!.ToObject<IEnumerable<KrakenStreamOrderBookEntry>>()!;
+                orderBook.Asks = arr[1]["a"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
+                orderBook.Bids = arr[2]["b"]!.ToObject<ICollection<KrakenStreamOrderBookEntry>>()!;
                 orderBook.Checksum = arr[2]["c"]!.Value<uint>();
                 result.Topic = arr[3].ToString();
                 result.Symbol = arr[4].ToString();
